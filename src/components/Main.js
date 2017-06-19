@@ -1,16 +1,15 @@
 require('normalize.css/normalize.css');
-require('styles/App.scss');
+require('styles/App.css');
 
 import React from 'react';
-import InputContent from './input'
 
+let yeomanImage = require('../images/yeoman.png');
 
 class AppComponent extends React.Component {
   render() {
     return (
-      <div>
-        <InputContent />
-        <div>hello world</div>
+      <div className="index">
+        Loading...
       </div>
     );
   }
