@@ -1,5 +1,19 @@
 /* Base Application Styles */
 body {
   color: #222;
-  background: blue;
+  background: #fff;
+}
+
+.input-container {
+  width: 50%;
+  display: inline-block;
+
+  @at-root .input-box {
+    width: 80%;
+    margin-left: 10%;
+
+    @at-root .input-text{
+
+    }
+  }
 }
