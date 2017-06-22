@@ -4,13 +4,14 @@ require('styles/App.scss');
 import React from 'react';
 import InputContainer from './InputContainer';
 import 'antd/lib/date-picker/style/css';
+import Pool from './Pool';
 
 export default class AppComponent extends React.Component {
   constructor(props, context) {
     super(props, context);
 
     this.state = {
-      pool: [],
+      pool: []
     }
 
     this.addValues = this.addValues.bind(this);
@@ -29,14 +30,15 @@ export default class AppComponent extends React.Component {
     a = this.state.pool.concat(a);
 
     this.setState({
-      pool: a,
+      pool: a
     })
   }
 
   render() {
     return (
-      <div className="index">
+      <div className='index'>
         <InputContainer add={this.addValues}/>
+        <Pool value={this.state.pool}/>
       </div>
     );
   }

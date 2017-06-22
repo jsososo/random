@@ -43,3 +43,22 @@ body {
     }
   }
 }
+
+.ant-card {
+  display: inline-block;
+  width: 40%;
+  margin: 20px 5%;
+  min-height: 200px;
+  border: 1px solid #aaa;
+  border-radius: 10px;
+  vertical-align: top;
+
+  .ant-card-head {
+    padding: 10px 0 5px 10px;
+    border-bottom: 1px solid #aaa;
+  }
+  .ant-card-body {
+    padding: 10px;
+    overflow: hidden;
+  }
+}

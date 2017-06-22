@@ -67,10 +67,23 @@ export default class InputBox extends React.Component {
       })
       // 全部都存在输入,且end大于start
       if (!empty && value[1] > value[0]) {
-        for (let i = value[0]; i < value[1]; i += value[2]) {
+        for (let i = value[0]; i <= value[1]; i += value[2]) {
           randomArray.push(i);
         }
+
+        info.input.map(item => {
+          this.refs[`${info.className}-${item}`].refs.input.value = '';
+        });
       }
+    }
+
+    // 字母类型
+    if (!empty) {
+      value.map((item, index) => {
+        value[index] = item.charCodeAt();
+      })
+
+      console.log(value);
     }
 
     // teatarea
@@ -78,6 +91,8 @@ export default class InputBox extends React.Component {
       if (!empty) {
         // 切割
         randomArray = value[0].split('--');
+
+        this.refs[`${info.className}-${info.input[0]}`].refs.input.value = '';
       }
     }
 
