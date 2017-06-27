@@ -1,4 +1,17 @@
 /* Base Application Styles */
+@mixin border-radius($value) {
+    -moz-border-radius: $value;
+    -webkit-border-radius: $value;
+    border-radius: $value;
+}
+@mixin transition($values...) {
+        -ms-transition: $values; /* IE 9 */
+       -moz-transition: $values; /* Firefox */
+    -webkit-transition: $values; /* Safari */
+            transition: $values;
+}
+
+
 body {
   color: #222;
   background: #fff;
@@ -66,5 +79,52 @@ body {
   .ant-card-body {
     padding: 10px;
     overflow: hidden;
+    position: relative;
+
+    .card-content {
+      height: 100px;
+      margin-bottom: 50px;
+      overflow-y: auto;
+    }
+
+    .btn-box {
+      position: absolute;
+      bottom: 0;
+      padding: 15px 10px;
+      display: inline-block;
+      right: 0;
+
+      button {
+        padding: 5px 10px;
+        margin: 0 5px;
+        @include border-radius(5px);
+        border: none;
+        @include transition(0.5s);
+        outline: none;
+        cursor: pointer;
+
+        &.ant-btn {
+          background: white;
+          border: 1px solid gray;
+
+          &:hover {
+            background: #108ee9;
+            color: white;
+            border-color: #108ee9;
+          }
+
+          &.ant-btn-danger {
+            background: white;
+            border: 1px solid #f04134;
+
+            &:hover {
+              background: #f04134;
+              color: white;
+              border-color: #f04134;
+            }
+          }
+        }
+      }
+    }
   }
 }

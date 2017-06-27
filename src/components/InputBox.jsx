@@ -117,12 +117,11 @@ export default class InputBox extends React.Component {
 
     // teatarea
     if (info.className === 'input-area') {
-      console.log()
       if (!empty) {
         // 切割
         randomArray = value[0].split('--');
 
-        this.refs[`${info.className}-${info.input[0]}`].refs.input.value = unescape('%0a');
+        this.refs[`${info.className}-${info.input[0]}`].refs.input.value = '';
       }
     }
 

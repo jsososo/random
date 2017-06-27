@@ -15,6 +15,29 @@ export default class AppComponent extends React.Component {
     }
 
     this.addValues = this.addValues.bind(this);
+    this.clearDuplicates = this.clearDuplicates.bind(this);
+    this.clearAll = this.clearAll.bind(this);
+  }
+
+  clearDuplicates() {
+    let [newPool, temp] = [[], []];
+
+    this.state.pool.map(item => {
+      if (temp[item] === undefined) {
+        temp[item] = true;
+        newPool.push(item);
+      }
+    })
+
+    this.setState({
+      pool: newPool
+    })
+  }
+
+  clearAll() {
+    this.setState({
+      pool: []
+    })
   }
 
   addValues(arr) {
@@ -38,7 +61,7 @@ export default class AppComponent extends React.Component {
     return (
       <div className='index'>
         <InputContainer add={this.addValues}/>
-        <Pool value={this.state.pool}/>
+        <Pool value={this.state.pool} clearDuplicates={this.clearDuplicates} clearAll={this.clearAll}/>
       </div>
     );
   }
