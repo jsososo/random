@@ -3,8 +3,9 @@ require('styles/App.scss');
 
 import React from 'react';
 import InputContainer from './InputContainer';
-import 'antd/lib/date-picker/style/css';
+import 'antd/dist/antd.css';
 import Pool from './Pool';
+import { message } from 'antd';
 
 export default class AppComponent extends React.Component {
   constructor(props, context) {
@@ -32,12 +33,16 @@ export default class AppComponent extends React.Component {
     this.setState({
       pool: newPool
     })
+
+    message.success('Clear duplicates success');
   }
 
   clearAll() {
     this.setState({
       pool: []
     })
+
+    message.success('Clear all success');
   }
 
   addValues(arr) {
@@ -55,6 +60,8 @@ export default class AppComponent extends React.Component {
     this.setState({
       pool: a
     })
+
+    message.success('Add success');
   }
 
   render() {

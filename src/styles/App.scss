@@ -11,7 +11,6 @@
             transition: $values;
 }
 
-
 body {
   color: #222;
   background: #fff;
@@ -68,13 +67,11 @@ body {
   width: 40%;
   margin: 20px 5%;
   min-height: 200px;
-  border: 1px solid #aaa;
-  border-radius: 10px;
   vertical-align: top;
+  @include border-radius(10px);
 
   .ant-card-head {
     padding: 10px 0 5px 10px;
-    border-bottom: 1px solid #aaa;
   }
   .ant-card-body {
     padding: 10px;
@@ -97,33 +94,9 @@ body {
       button {
         padding: 5px 10px;
         margin: 0 5px;
-        @include border-radius(5px);
-        border: none;
-        @include transition(0.5s);
         outline: none;
         cursor: pointer;
 
-        &.ant-btn {
-          background: white;
-          border: 1px solid gray;
-
-          &:hover {
-            background: #108ee9;
-            color: white;
-            border-color: #108ee9;
-          }
-
-          &.ant-btn-danger {
-            background: white;
-            border: 1px solid #f04134;
-
-            &:hover {
-              background: #f04134;
-              color: white;
-              border-color: #f04134;
-            }
-          }
-        }
       }
     }
   }
