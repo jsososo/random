@@ -5,12 +5,23 @@ export default class InputBox extends React.Component {
   constructor (props, context) {
     super(props, context);
 
+    this.state = {
+      visible: 'hidden'
+    }
+
     this.pressEnter = this.pressEnter.bind(this);
     this.handleChange = this.handleChange.bind(this);
+    this.inputError = this.inputError.bind(this);
+  }
+
+  inputError() {
+    this.setState({visible: 'visible'});
   }
 
   // 输入，正则匹配并修改
   handleChange() {
+    this.setState({visible: 'hidden'});
+
     let [info] = [this.props.type];
 
     // 数字类型
@@ -46,17 +57,15 @@ export default class InputBox extends React.Component {
 
     // 循环获取每一个input的值
     info.input.map(item => {
-      // 如果存在空输入则跳过
-      if (!empty) {
+      let element = this.refs[`${info.className}-${item}`].refs.input;
 
-        let element = this.refs[`${info.className}-${item}`].refs.input;
-
-        // 空输入
-        if (element.value === undefined) {
-          empty = true;
-        } else {
-          value.push(element.value);
-        }
+      // 空输入
+      if (element.value === '') {
+        empty = true;
+        this.inputError();
+        return 0;
+      } else {
+        value.push(element.value);
       }
     })
 
@@ -65,8 +74,8 @@ export default class InputBox extends React.Component {
       value.map((item, index) => {
         value[index] = Number(item);
       })
-      // 全部都存在输入,且end大于start
-      if (!empty && value[1] > value[0]) {
+      // end大于start
+      if (value[1] >= value[0]) {
         for (let i = value[0]; i <= value[1]; i += value[2]) {
           randomArray.push(i);
         }
@@ -74,25 +83,46 @@ export default class InputBox extends React.Component {
         info.input.map(item => {
           this.refs[`${info.className}-${item}`].refs.input.value = '';
         });
+      } else {
+        this.inputError();
+        return 0;
       }
     }
 
     // 字母类型
-    if (!empty) {
+    if (info.className === 'input-letter') {
       value.map((item, index) => {
         value[index] = item.charCodeAt();
       })
 
-      console.log(value);
+      // 如果大小写不一致，全转为小写
+      if (value[0] >= 97 && value[1] < 97) {
+        value[1] += 32;
+      }
+      if (value[0] < 97 && value[1] >= 97) {
+        value[0] += 32;
+      }
+
+      value[2] -= 48;
+
+      if (value[1] < value[0]) {
+        this.inputError();
+        return 0;
+      } else {
+        for (let i = value[0]; i <= value[1]; i += value[2]) {
+          randomArray.push(String.fromCharCode(i));
+        }
+      }
     }
 
     // teatarea
     if (info.className === 'input-area') {
+      console.log()
       if (!empty) {
         // 切割
         randomArray = value[0].split('--');
 
-        this.refs[`${info.className}-${info.input[0]}`].refs.input.value = '';
+        this.refs[`${info.className}-${info.input[0]}`].refs.input.value = unescape('%0a');
       }
     }
 
@@ -123,6 +153,7 @@ export default class InputBox extends React.Component {
             onChange={this.handleChange}
           />)
         })}
+        <div className='error-info' style={{visibility: this.state.visible}}>* Input Error</div>
       </div>
     )
   }
