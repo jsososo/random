@@ -112,9 +112,20 @@ body {
       width: 50%;
 
       .switch-describtion {
-      margin: 0 10px;
-      vertical-align: middle;
+        margin: 0 10px;
+        vertical-align: middle;
+      }
     }
+
+    .get-number {
+      margin: 15px 0;
+    }
+
+    .output-item {
+      display: inline-block;
+      min-width: 33.33%;
+      overflow: hidden;
+      padding: 0 5px;
     }
   }
 }

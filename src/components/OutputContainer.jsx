@@ -7,13 +7,26 @@ export default class OutputContainer extends React.Component {
 
     this.state = {
       remove: false,
-      auto: false,
-      number: this.props.length
+      auto: true,
+      length: this.props.length,
+      number: 0,
+      manualStart: false,
+      btnType: 'primary',
+      output: []
     }
 
     this.getAndRemove = this.getAndRemove.bind(this);
     this.autoGet = this.autoGet.bind(this);
     this.getNumber = this.getNumber.bind(this);
+    this.getRandom = this.getRandom.bind(this);
+    this.onClickGet = this.onClickGet.bind(this);
+  }
+
+  componentWillReceiveProps(nextProps) {
+    this.setState({
+      length: nextProps.length,
+      number: Math.min(nextProps.length, this.state.number)
+    })
   }
 
   getAndRemove() {
@@ -26,7 +39,11 @@ export default class OutputContainer extends React.Component {
 
   autoGet() {
     this.setState((prevState) => ({
-      auto: !prevState.auto
+      auto: !prevState.auto,
+      btnType: 'primary',
+      manualStart: false,
+      output: [],
+      outputIndex: []
     }))
   }
 
@@ -34,6 +51,66 @@ export default class OutputContainer extends React.Component {
     this.setState({
       number: Number(value)
     })
+  }
+
+  getRandom() {
+    let [arr, arrIndex, pool, length, number, remove] = [[], [], this.props.pool, this.state.length, this.state.number, this.state.remove];
+
+      for (let i = number; i > 0; i--) {
+        let r = parseInt(Math.random() * (length - number + i));
+
+        arr.push(pool[r]);
+        arrIndex.push(r);
+
+        if (remove) {
+          pool.splice(r, 1);
+        }
+      }
+      if (!this.state.manualStart) {
+        this.props.changePool(pool);
+        this.setState({
+          pool: pool,
+          output: arr,
+          outputIndex: arrIndex
+        })
+      } else {
+        this.setState({
+          output: arr,
+          outputIndex: arrIndex
+        })
+      }
+  }
+
+  onClickGet() {
+    if (this.state.auto) {
+      this.getRandom();
+    }
+
+    if (!this.state.auto && !this.state.manualStart) {
+      this.setState({
+        manualStart: true,
+        btnType: 'danger'
+      })
+
+      this.manualGetRandom = setInterval(() => this.getRandom(), 10);
+    }
+    if (!this.state.auto && this.state.manualStart) {
+      this.setState({
+        manualStart: false,
+        btnType: 'primary'
+      })
+      clearInterval(this.manualGetRandom);
+
+      if (this.state.remove) {
+        let pool = this.state.pool;
+        this.state.outputIndex.map(index => {
+          pool.splice(index, 1);
+        })
+        this.setState({
+          pool: pool
+        })
+      }
+    }
   }
 
   render() {
@@ -56,9 +133,19 @@ export default class OutputContainer extends React.Component {
           </div>
         </div>
         <div className='get-number'>
-          Get
-          <InputNumber min={1} max={this.props.length || 1} defaultValue={1} onChange={this.getNumber} />
-          value(s)
+          Get&nbsp;&nbsp;
+          <InputNumber min={1} max={this.props.length || 1} defaultValue={0} onChange={this.getNumber} value={this.state.number} />
+          &nbsp;&nbsp;value(s)
+        </div>
+        <Button type={this.state.btnType} onClick={this.onClickGet} disabled={!this.state.number && 'disabled'}>
+          {this.state.auto && 'GET'}
+          {!this.state.auto && !this.state.manualStart && 'START'}
+          {!this.state.auto && this.state.manualStart && 'STOP'}
+        </Button>
+        <div className='output-display'>
+          {this.state.output.map((item, index) => {
+            return (<div key={index} className='output-item'>{item}</div>)
+          })}
         </div>
       </div>
       )

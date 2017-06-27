@@ -22,6 +22,7 @@ export default class AppComponent extends React.Component {
     this.clearDuplicates = this.clearDuplicates.bind(this);
     this.clearAll = this.clearAll.bind(this);
     this.getAndRemove = this.getAndRemove.bind(this);
+    this.changePool = this.changePool.bind(this);
   }
 
   clearDuplicates() {
@@ -77,13 +78,20 @@ export default class AppComponent extends React.Component {
     }))
   }
 
+  changePool(arr) {
+    this.setState({
+      pool: arr,
+      length: arr.length
+    })
+  }
+
   render() {
     return (
       <div className='index'>
         <InputContainer add={this.addValues}/>
         <div className='display-right'>
           <Pool value={this.state.pool} clearDuplicates={this.clearDuplicates} clearAll={this.clearAll}/>
-          <OutputContainer getAndRemove={this.getAndRemove} length={this.state.length}/>
+          <OutputContainer getAndRemove={this.getAndRemove} length={this.state.length} pool={this.state.pool} changePool={this.changePool}/>
         </div>
       </div>
     );
