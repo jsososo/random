@@ -62,42 +62,59 @@ body {
   }
 }
 
-.ant-card {
+.display-right {
   display: inline-block;
   width: 40%;
   margin: 20px 5%;
   min-height: 200px;
   vertical-align: top;
-  @include border-radius(10px);
 
-  .ant-card-head {
-    padding: 10px 0 5px 10px;
-  }
-  .ant-card-body {
-    padding: 10px;
-    overflow: hidden;
-    position: relative;
+  .ant-card {
+    @include border-radius(10px);
 
-    .card-content {
-      height: 100px;
-      margin-bottom: 50px;
-      overflow-y: auto;
+    .ant-card-head {
+      padding: 10px 0 5px 10px;
     }
+    .ant-card-body {
+      padding: 10px;
+      overflow: hidden;
+      position: relative;
 
-    .btn-box {
-      position: absolute;
-      bottom: 0;
-      padding: 15px 10px;
-      display: inline-block;
-      right: 0;
-
-      button {
-        padding: 5px 10px;
-        margin: 0 5px;
-        outline: none;
-        cursor: pointer;
-
+      .card-content {
+        height: 100px;
+        margin-bottom: 50px;
+        overflow-y: auto;
       }
+
+      .btn-box {
+        position: absolute;
+        bottom: 0;
+        padding: 15px 10px;
+        display: inline-block;
+        right: 0;
+
+        button {
+          padding: 5px 10px;
+          margin: 0 5px;
+          outline: none;
+          cursor: pointer;
+
+        }
+      }
+    }
+  }
+
+  .output-container {
+    margin-top: 20px;
+
+    .switch-box {
+      display: inline-block;
+      width: 50%;
+
+      .switch-describtion {
+      margin: 0 10px;
+      vertical-align: middle;
+    }
     }
   }
 }
