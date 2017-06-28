@@ -90,7 +90,7 @@ export default class AppComponent extends React.Component {
       <div className='index'>
         <InputContainer add={this.addValues}/>
         <div className='display-right'>
-          <Pool value={this.state.pool} clearDuplicates={this.clearDuplicates} clearAll={this.clearAll}/>
+          <Pool value={this.state.pool} clearDuplicates={this.clearDuplicates} clearAll={this.clearAll} changePool={this.changePool}/>
           <OutputContainer getAndRemove={this.getAndRemove} length={this.state.length} pool={this.state.pool} changePool={this.changePool}/>
         </div>
       </div>
