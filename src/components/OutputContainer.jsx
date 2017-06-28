@@ -54,7 +54,7 @@ export default class OutputContainer extends React.Component {
   }
 
   getRandom() {
-    let [arr, arrIndex, pool, length, number, remove] = [[], [], this.props.pool, this.state.length, this.state.number, this.state.remove];
+    let [arr, arrIndex, pool, length, number, remove] = [[], [], [...this.props.pool], this.state.length, this.state.number, this.state.remove];
 
       for (let i = number; i > 0; i--) {
         let r = parseInt(Math.random() * (length - number + i));
@@ -66,14 +66,15 @@ export default class OutputContainer extends React.Component {
           pool.splice(r, 1);
         }
       }
+      // 自动获取
       if (!this.state.manualStart) {
         this.props.changePool(pool);
         this.setState({
-          pool: pool,
           output: arr,
           outputIndex: arrIndex
         })
       } else {
+        // 手动，开始获取
         this.setState({
           output: arr,
           outputIndex: arrIndex
@@ -82,18 +83,22 @@ export default class OutputContainer extends React.Component {
   }
 
   onClickGet() {
+    // 自动获取
     if (this.state.auto) {
       this.getRandom();
     }
 
+    // 手动，开始获取
     if (!this.state.auto && !this.state.manualStart) {
       this.setState({
         manualStart: true,
         btnType: 'danger'
       })
 
-      this.manualGetRandom = setInterval(() => this.getRandom(), 10);
+      this.manualGetRandom = setInterval(() => this.getRandom(), 20);
     }
+
+    // 手动，结束获取
     if (!this.state.auto && this.state.manualStart) {
       this.setState({
         manualStart: false,
@@ -101,14 +106,13 @@ export default class OutputContainer extends React.Component {
       })
       clearInterval(this.manualGetRandom);
 
+      // 如果需要清除
       if (this.state.remove) {
-        let pool = this.state.pool;
+        let pool = [...this.props.pool];
         this.state.outputIndex.map(index => {
           pool.splice(index, 1);
         })
-        this.setState({
-          pool: pool
-        })
+        this.props.changePool(pool);
       }
     }
   }

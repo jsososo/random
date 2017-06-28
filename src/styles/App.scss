@@ -121,11 +121,15 @@ body {
       margin: 15px 0;
     }
 
-    .output-item {
-      display: inline-block;
-      min-width: 33.33%;
-      overflow: hidden;
-      padding: 0 5px;
+    .output-display {
+      margin: 20px 0;
+
+      .output-item {
+        display: inline-block;
+        min-width: 33.33%;
+        overflow: hidden;
+        padding: 0 5px;
+      }
     }
   }
 }
