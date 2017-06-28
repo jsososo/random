@@ -138,7 +138,7 @@ export default class OutputContainer extends React.Component {
         </div>
         <div className='get-number'>
           Get&nbsp;&nbsp;
-          <InputNumber min={1} max={this.props.length || 1} defaultValue={0} onChange={this.getNumber} value={this.state.number} />
+          <InputNumber min={0} max={this.props.length} defaultValue={0} onChange={this.getNumber} value={this.state.number} />
           &nbsp;&nbsp;value(s)
         </div>
         <Button type={this.state.btnType} onClick={this.onClickGet} disabled={!this.state.number && 'disabled'}>
