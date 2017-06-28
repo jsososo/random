@@ -1,5 +1,5 @@
 import React from 'react';
-import { Card, Button, Modal, Input, Radio } from 'antd';
+import { Card, Button, Modal, Input, Radio, Icon } from 'antd';
 
 const RadioGroup = Radio.Group;
 
@@ -8,7 +8,6 @@ export default class Pool extends React.Component {
     super(props, context);
 
     this.state = {
-      showAll: false,
       modalVisible: false,
       modalType: 'Store',
       storage: {},
@@ -20,7 +19,6 @@ export default class Pool extends React.Component {
       pool: this.props.value
     }
 
-    this.handleOk = this.handleOk.bind(this);
     this.handleCancel = this.handleCancel.bind(this);
     this._showModal = this._showModal.bind(this);
     this.showModal = this.showModal.bind(this);
@@ -52,13 +50,11 @@ export default class Pool extends React.Component {
 
   handleCancel() {
     this.setState({
-      modalVisible: false
-    })
-  }
-
-  handleOk() {
-    this.setState({
-      modalVisible: false
+      modalVisible: false,
+      newStorage: null,
+      modalWarning: false,
+      modalBtn: 'disable',
+      selectRadio: null
     })
   }
 
@@ -81,8 +77,14 @@ export default class Pool extends React.Component {
     if (this.state.modalType === 'Store') {
       let [storage, storageName] = [{...this.state.storage}, [...this.state.storageName]];
 
-      storage[this.state.newStorage] = [...this.state.pool];
-      storageName.push(this.state.newStorage);
+      storage[this.state.newStorage] = [...this.state.pool].join(',');
+      if (this.state.modalWarning) {
+        let i = storageName.indexOf(this.state.newStorage);
+
+        storageName.splice(i, 1);
+      }
+
+      storageName.unshift(this.state.newStorage);
 
       // 存为localStorage
       window.localStorage.setItem(this.state.newStorage, [...this.state.pool]);
@@ -93,7 +95,8 @@ export default class Pool extends React.Component {
         modalWarning: false,
         modalBtn: 'disable',
         newStorage: null,
-        storageName: storageName
+        storageName: storageName,
+        newStorage: null,
       })
     } else {
       // 读取
@@ -118,7 +121,7 @@ export default class Pool extends React.Component {
       modalBtn = '';
 
       // 存在重名
-      if (this.state.storage[e.target.value]) {
+      if (this.state.storageName.indexOf(e.target.value) >= 0) {
         modalWarning = true;
       }
     }
@@ -144,12 +147,33 @@ export default class Pool extends React.Component {
       this.setState({
         storage: {},
         storageName: [],
-        newStorage: null,
         modalBtn: 'disable',
         selectRadio: null,
         pool: this.props.value
       })
 
+    } else {
+      window.localStorage.removeItem(value);
+
+      let [storage, storageName, modalBtn, selectRadio] = [window.localStorage, this.state.storageName, this.state.modalBtn, this.state.selectRadio];
+
+      if (selectRadio === value) {
+        selectRadio = null;
+      }
+
+      let index = storageName.indexOf(value);
+      storageName.splice(index, 1);
+
+      if (!storageName.length) {
+        modalBtn = 'disable'
+      }
+
+      this.setState({
+        storage: storage,
+        storageName: storageName,
+        selectRadio: selectRadio,
+        modalBtn: modalBtn
+      })
     }
   }
 
@@ -158,7 +182,6 @@ export default class Pool extends React.Component {
       <Modal
         title={this.state.modalType}
         visible={this.state.modalVisible}
-        onOk={this.handleOk}
         onCancel={this.handleCancel}
         footer={<Button type='primary' onClick={this.onClickModalBtn} disabled={this.state.modalBtn}>{this.state.modalType === 'Store' ? 'Store' : 'Read'}</Button>}
       >
@@ -166,18 +189,18 @@ export default class Pool extends React.Component {
         // 存储pool
         (<div className='modal-store'>
           <div className='modal-input-row'>
-            <span className='modal-input-title'>Name: </span><Input className='modal-input-text' onChange={this.inputStorageName} />
+            <span className='modal-input-title'>Name: </span><Input className='modal-input-text' onChange={this.inputStorageName} value={this.state.newStorage} />
           </div>
-          <div className='modal-warning'>{this.state.modalWarning && 'Warnning'}</div>
+          <div className='modal-warning'>{this.state.modalWarning && <span><Icon type="exclamation-circle-o" />Warning: This name is duplicate of the existing cache and will replace the original cache</span>}</div>
         </div>):
         // 读取缓存
         (<div>
           {this.state.storageName.length !== 0 &&
             <RadioGroup onChange={this.selectRadio} value={this.state.selectRadio}>
               {this.state.storageName.map(item => {
-                return <Radio value={item} key={`radio-${item}`}>{item}</Radio>
+                return <Radio value={item} key={`radio-${item}`}><span className='radio-value'>{item}</span><a className='radio-delete' onClick={this.clearStorage.bind(this, item)}>delete</a></Radio>
               })}
-              <a onClick={this.clearStorage.bind(this, true)}>clear all</a>
+              <a className='radio-clear-all' onClick={this.clearStorage.bind(this, true)}>clear all</a>
             </RadioGroup>
           }
           {this.state.storageName.length === 0 && <div>no cache</div>}

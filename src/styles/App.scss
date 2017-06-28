@@ -75,6 +75,19 @@ body {
         display: block;
         width: 70%;
         margin: 10px 10%;
+
+        .radio-value {
+          display: inline-block;
+          width: 81%;
+          overflow: hidden;
+          vertical-align: middle;
+        }
+      }
+
+      .radio-clear-all {
+        display: inline-block;
+        text-align: right;
+        margin: 10px 0 10px 71%;
       }
     }
 
@@ -88,6 +101,13 @@ body {
       .modal-input-text {
         width: calc(80% - 58px);
       }
+    }
+
+    .modal-warning {
+      margin: 15px;
+      width: 80%;
+      text-align: center;
+      color: #cc3;
     }
   }
 }
