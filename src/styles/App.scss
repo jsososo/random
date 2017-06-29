@@ -24,6 +24,10 @@ body {
     width: 80%;
     margin-left: 10%;
 
+    &.delete-box {
+      margin-bottom: 100px;
+    }
+
     @at-root .input-info {
       margin: 20px 2.5%;
       width: 95%;
