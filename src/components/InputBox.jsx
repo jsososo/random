@@ -19,7 +19,9 @@ export default class InputBox extends React.Component {
   }
 
   // 输入，正则匹配并修改
-  handleChange() {
+  handleChange(e) {
+    e.target.value = e.target.value.replace('\n', '');
+
     this.setState({visible: 'hidden'});
 
     let [info] = [this.props.type];
@@ -75,7 +77,7 @@ export default class InputBox extends React.Component {
         value[index] = Number(item);
       })
       // end大于start
-      if (value[1] >= value[0]) {
+      if (value[1] >= value[0] && value[2] !== 0) {
         for (let i = value[0]; i <= value[1]; i += value[2]) {
           randomArray.push(i);
         }
@@ -105,7 +107,7 @@ export default class InputBox extends React.Component {
 
       value[2] -= 48;
 
-      if (value[1] < value[0]) {
+      if (value[1] < value[0] || value[2] === 0) {
         this.inputError();
         return 0;
       } else {

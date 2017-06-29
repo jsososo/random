@@ -23,6 +23,7 @@ export default class AppComponent extends React.Component {
     this.clearAll = this.clearAll.bind(this);
     this.getAndRemove = this.getAndRemove.bind(this);
     this.changePool = this.changePool.bind(this);
+    this.deleteValues = this.deleteValues.bind(this);
   }
 
   clearDuplicates() {
@@ -85,10 +86,42 @@ export default class AppComponent extends React.Component {
     })
   }
 
+  deleteValues(arr) {
+    let [pool, l, flag] = [[...this.state.pool], arr.length, false];
+
+    for (let i = 0; i < l; i++) {
+      let item = arr.shift();
+      let index = pool.indexOf(item);
+
+      if (index >= 0) {
+        pool.splice(index, 1);
+        flag = true;
+      } else {
+        index = pool.indexOf(Number(item));
+
+        if (index >= 0) {
+          pool.splice(index, 1);
+          flag = true;
+        }
+      }
+    }
+
+    this.setState({
+      pool: pool,
+      length: pool.length
+    })
+
+    if (flag === true) {
+      message.success('Delete success')
+    } else {
+      message.error('Not found')
+    }
+  }
+
   render() {
     return (
       <div className='index'>
-        <InputContainer add={this.addValues}/>
+        <InputContainer add={this.addValues} deleteValues={this.deleteValues}/>
         <div className='display-right'>
           <Pool value={this.state.pool} clearDuplicates={this.clearDuplicates} clearAll={this.clearAll} changePool={this.changePool}/>
           <OutputContainer getAndRemove={this.getAndRemove} length={this.state.length} pool={this.state.pool} changePool={this.changePool}/>

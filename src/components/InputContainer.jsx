@@ -1,5 +1,6 @@
 import React from 'react';
 import InputBox from './InputBox';
+import { Input } from 'antd';
 
 export default class InputContainer extends React.Component {
 
@@ -27,8 +28,47 @@ export default class InputContainer extends React.Component {
         title: 'Add value',
         description: 'Input the number and hint the ENTER to add values. (Divide by "--"  ) eg: input [a--1--2--c] means add [a, 1, 2, c] to the pool.',
         input: ['']
-      }
+      },
+      deleteBox: []
     }
+
+    this.handleChange = this.handleChange.bind(this);
+    this.deleteValues = this.deleteValues.bind(this);
+    this._deleteBox = this._deleteBox.bind(this);
+  }
+
+  handleChange(e) {
+    let deleteBox = e.target.value.replace('\n', '').split('--');
+    this.setState({
+      deleteBox: deleteBox
+    })
+  }
+
+  deleteValues() {
+    this.props.deleteValues(this.state.deleteBox);
+
+    this.setState({
+      deleteBox: []
+    })
+  }
+
+  _deleteBox() {
+    return (
+      <div className={'input-box delete-box'}>
+        <div className='input-info'>
+          <div className='input-info-title'>Delete values</div>
+          <div className='input-info-description'>Input the number and hint the ENTER to add values. (Divide by "--"  ) eg: input [1--3--b] means delete [1, 3, b] from the pool.</div>
+        </div>
+        <Input
+          type='textarea'
+          size='large'
+          rows='4'
+          onPressEnter={this.deleteValues}
+          onChange={this.handleChange}
+          value={this.state.deleteBox.join('--')}
+        />
+      </div>
+      )
   }
 
   render () {
@@ -37,6 +77,7 @@ export default class InputContainer extends React.Component {
         <InputBox type={this.state.randomNumber} add={this.props.add}/>
         <InputBox type={this.state.randomLetter} add={this.props.add}/>
         <InputBox type={this.state.randomValue} add={this.props.add}/>
+        {this._deleteBox()}
       </div>
     )
   }

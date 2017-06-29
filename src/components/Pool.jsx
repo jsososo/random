@@ -96,7 +96,7 @@ export default class Pool extends React.Component {
         modalBtn: 'disable',
         newStorage: null,
         storageName: storageName,
-        newStorage: null,
+        newStorage: null
       })
     } else {
       // 读取

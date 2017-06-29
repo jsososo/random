@@ -12,7 +12,9 @@ export default class OutputContainer extends React.Component {
       number: 0,
       manualStart: false,
       btnType: 'primary',
-      output: []
+      output: [],
+      history: [],
+      clearHistory: false
     }
 
     this.getAndRemove = this.getAndRemove.bind(this);
@@ -20,6 +22,7 @@ export default class OutputContainer extends React.Component {
     this.getNumber = this.getNumber.bind(this);
     this.getRandom = this.getRandom.bind(this);
     this.onClickGet = this.onClickGet.bind(this);
+    this.clearHistory = this.clearHistory.bind(this);
   }
 
   componentWillReceiveProps(nextProps) {
@@ -30,6 +33,7 @@ export default class OutputContainer extends React.Component {
   }
 
   getAndRemove() {
+    // 删除pool中的值，更新给main
     this.setState((prevState) => ({
       remove: !prevState.remove
     }))
@@ -38,6 +42,7 @@ export default class OutputContainer extends React.Component {
   }
 
   autoGet() {
+    // 自动获取
     this.setState((prevState) => ({
       auto: !prevState.auto,
       btnType: 'primary',
@@ -69,10 +74,12 @@ export default class OutputContainer extends React.Component {
       // 自动获取
       if (!this.state.manualStart) {
         this.props.changePool(pool);
-        this.setState({
+        this.setState((prevState) => ({
           output: arr,
-          outputIndex: arrIndex
-        })
+          outputIndex: arrIndex,
+          history: [...prevState.history, ...arr],
+          clearHistory: true
+        }))
       } else {
         // 手动，开始获取
         this.setState({
@@ -100,10 +107,11 @@ export default class OutputContainer extends React.Component {
 
     // 手动，结束获取
     if (!this.state.auto && this.state.manualStart) {
-      this.setState({
+      this.setState((prevState) => ({
         manualStart: false,
-        btnType: 'primary'
-      })
+        btnType: 'primary',
+        history: [...prevState.history, ...prevState.output]
+      }))
       clearInterval(this.manualGetRandom);
 
       // 如果需要清除
@@ -115,6 +123,13 @@ export default class OutputContainer extends React.Component {
         this.props.changePool(pool);
       }
     }
+  }
+
+  clearHistory() {
+    this.setState({
+      history: [],
+      clearHistory: false
+    })
   }
 
   render() {
@@ -147,10 +162,12 @@ export default class OutputContainer extends React.Component {
           {!this.state.auto && this.state.manualStart && 'STOP'}
         </Button>
         <div className='output-display'>
+          <div>Output: </div>
           {this.state.output.map((item, index) => {
             return (<div key={index} className='output-item'>{item}</div>)
           })}
         </div>
+        <div className='ouput-history'><div>History: {this.state.clearHistory && <a className='history-clear' onClick={this.clearHistory}>clear all</a>}</div>{this.state.history.join(' | ')}</div>
       </div>
       )
   }
