@@ -146,8 +146,8 @@ export default class OutputContainer extends React.Component {
           <div className='switch-box'>
             <Switch onChange={this.autoGet}/>
             <span className='switch-describtion'>
-              {this.state.auto && 'Manual'}
-              {!this.state.auto && 'Automatical'}
+              {this.state.auto && 'Automatical'}
+              {!this.state.auto && 'Manual'}
             </span>
           </div>
         </div>
